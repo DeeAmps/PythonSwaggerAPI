@@ -1,0 +1,13 @@
+SAWGGER_API_VERSION = "1.0"
+SWAGGER_TITLE = "Python API"
+SWAGGER_DESCRIPTION = "Python Swagger API for Oracle HR Database"
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+BASE_URL = '/api'
+SWAGGER_URL = '/api-docs'
+SQLALCHEMY_DATABASE_URI = "oracle://hr:hr@localhost/xe"
+HOST = ""
+PORT = 4000
+ENV = "development"
+DEBUG = True
+SERVER_NAME = "localhost:" + str(PORT)
+DB_CONNECTION = "hr/hr@localhost/xe"
