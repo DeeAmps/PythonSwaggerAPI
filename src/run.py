@@ -4,6 +4,7 @@ from src.controllers import EmployeesController, \
     LocationsController
 
 from flask_api import status
+from src.postModels import regionModel
 
 parser = api.parser()
 
@@ -125,6 +126,50 @@ class getSingleRegion(Resource):
             return res, status.HTTP_404_NOT_FOUND
         else:
             return res, status.HTTP_200_OK
+
+@regions.route('/regions/addRegion', endpoint='addRegion')
+class addRegion(Resource):
+    @regions.doc(expect=regionModel.region_model)
+    @regions.doc('Add New Region')
+    @regions.doc(responses={'201' : 'Created'})
+    @regions.doc(responses={'500': 'Internal Server Error'})
+    @regions.doc(description="Add New Region to Oracle HR Database")
+    @regions.doc(expect=regionModel.region_model, validate=True)
+    def post(self):
+        newRegionPayload = api.payload
+        res = RegionsController.AddRegion(newRegionPayload.regionName)
+        if res["success"]:
+            return res, status.HTTP_201_CREATED
+        else:
+            return res, status.HTTP_500_INTERNAL_SERVER_ERROR
+
+@regions.route('/regions/removeRegion/<int:id>', endpoint='removeRegion')
+class removeRegion(Resource):
+    @regions.doc('Delete Region')
+    @regions.doc(responses={'404' : 'Delete Success'})
+    @regions.doc(responses={'500': 'Internal Server Error'})
+    @regions.doc(description="Remove Region from Oracle HR Database")
+    def delete(self, id):
+        res = RegionsController.RemoveRegion(id)
+        if res["success"]:
+            return res, status.HTTP_404_NOT_FOUND
+        else:
+            return res, status.HTTP_500_INTERNAL_SERVER_ERROR
+
+@regions.route('/regions/updateRegion/<int:id>', endpoint='updateRegion')
+class updateRegion(Resource):
+    @regions.doc('Update Region')
+    @regions.doc(responses={'200' : 'Success'})
+    @regions.doc(responses={'500': 'Internal Server Error'})
+    @regions.doc(description="Update Region in Oracle HR Database")
+    def put(self, id):
+        newRegionPayload = api.payload
+        res = RegionsController.UpdateRegion(id, newRegionPayload.regionName)
+        if res["success"]:
+            return res, status.HTTP_200_OK
+        else:
+            return res, status.HTTP_500_INTERNAL_SERVER_ERROR
+
 
 @regions.route('/regions/getAllRegions', endpoint='getAllRegions')
 class getAllRegions(Resource):
